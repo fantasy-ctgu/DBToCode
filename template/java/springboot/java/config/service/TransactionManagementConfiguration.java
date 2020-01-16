@@ -1,4 +1,12 @@
-package com.ctgu.springbootbase.config.service;
+/*
+ * @Author: Fantasy
+ * @Date: 2020-01-13 09:10:50
+ * @LastEditors  : Fantasy
+ * @LastEditTime : 2020-01-16 10:28:19
+ * @Descripttion: 
+ * @Email: 776474961@qq.com
+ */
+package $${basePackage}.config.service;
 
 import javax.sql.DataSource;
 
@@ -12,7 +20,7 @@ import org.springframework.transaction.annotation.TransactionManagementConfigure
 /**  
 * @Title: TransactionManagementConfiguration.java  
 *
-* @Package com.ctgu.springbootbase.config.service  
+* @Package $${basePackage}.config.service  
 *
 * @Description: 对应spring-service里的transactionManager
 * 继承TransactionManagementConfigurer是因为开启annotation-driver

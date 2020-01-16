@@ -1,4 +1,12 @@
-package com.ctgu.springbootbase.config.orther;
+/*
+ * @Author: Fantasy
+ * @Date: 2020-01-13 09:10:50
+ * @LastEditors  : Fantasy
+ * @LastEditTime : 2020-01-16 10:28:09
+ * @Descripttion: 
+ * @Email: 776474961@qq.com
+ */
+package $${basePackage}.config.orther;
 
 import java.util.Properties;
 
@@ -11,7 +19,7 @@ import com.google.code.kaptcha.util.Config;
 /**
  * @Title: KaptchaConfiguration.java
  *
- * @Package com.ctgu.collegeservice.config.dao
+ * @Package $${basePackage}.config.dao
  *
  * @Description: 验证码
  *

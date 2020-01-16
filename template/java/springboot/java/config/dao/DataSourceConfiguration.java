@@ -1,4 +1,12 @@
-package com.ctgu.springbootbase.config.dao;
+/*
+ * @Author: Fantasy
+ * @Date: 2020-01-13 09:10:50
+ * @LastEditors  : Fantasy
+ * @LastEditTime : 2020-01-16 10:27:23
+ * @Descripttion: 
+ * @Email: 776474961@qq.com
+ */
+package $${basePackage}.config.dao;
 
 import java.beans.PropertyVetoException;
 
@@ -10,13 +18,13 @@ import org.springframework.context.annotation.Configuration;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**  
-* @Package com.ctgu.springbootbase.config.dao  
+* @Package $${basePackage}.config.dao  
 *
 * @Description:  配置datasource到ioc容器，对应spring-dao.xml
 *
 */
 @Configuration
-@MapperScan("com.ctgu.springbootbase.dao")
+@MapperScan("$${basePackage}.dao")
 public class DataSourceConfiguration {
 	@Value("${jdbc.driver}")
 	private String jdbcDriver;

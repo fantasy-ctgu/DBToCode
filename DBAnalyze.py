@@ -3,7 +3,7 @@
 @Author: Fantasy
 @Date: 2020-01-13 12:37:20
 @LastEditors  : Fantasy
-@LastEditTime : 2020-01-15 10:49:37
+@LastEditTime : 2020-01-16 10:59:04
 @Descripttion: 
 @Email: 776474961@qq.com
 '''
@@ -19,7 +19,7 @@ class DBAnalyze(object):
         '''格式
             [
                 {'tableName':'test',
-                'columns':[{'columnName':'','columnType':'','comment':''}]
+                'columns':[{'column_name':'user_name','columnName':'userName','ColumnName':'UserName','columnType':'','comment':''}]
                 },
             ]
         '''
@@ -32,7 +32,7 @@ class DBAnalyze(object):
         items = name.split('_')
         camelName = []
         camelName.append(items[0])
-        [camelName.append(item) for item in items[1:]]
+        [camelName.append(item.capitalize()) for item in items[1:]]
         return "".join(camelName)
 
     def formatCamelCaseByBig(self, name):
@@ -79,7 +79,9 @@ class DBAnalyze(object):
         items = line.split()
         column = {}
         if len(items) >= 2:
-            column['columnName'] = items[0]
+            column['column_name'] = items[0]
+            column['columnName'] = self.formatCamelCaseBySmall(items[0])
+            column['ColumnName'] = self.formatCamelCaseByBig(items[0])
             column['columnType'] = re.sub(r'\(\d*\)', "", items[1])
             if re.findall(r'\scomment\s', line):
                 str = line.split('comment')[-1].split()[-1]
@@ -102,7 +104,10 @@ class DBAnalyze(object):
                     # print("create database :"+self.isCreateDB(line))
                 elif self.isCreateTable(line):
                     table = {}
-                    table['tableName'] = self.isCreateTable(line)
+                    tableName = self.isCreateTable(line)
+                    table['table_name'] = tableName
+                    table['tableName'] = self.formatCamelCaseBySmall(tableName)
+                    table['TableName'] = self.formatCamelCaseByBig(tableName)
                     table['columns'] = []
                     isCreateTable = True
                     # print("create table :"+self.isCreateTable(line))

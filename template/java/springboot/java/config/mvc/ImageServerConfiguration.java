@@ -1,4 +1,12 @@
-package com.ctgu.springbootbase.config.mvc;
+/*
+ * @Author: Fantasy
+ * @Date: 2020-01-13 09:10:50
+ * @LastEditors: Fantasy
+ * @LastEditTime: 2020-01-15 14:34:51
+ * @Descripttion: 
+ * @Email: 776474961@qq.com
+ */
+package $${basePackage}.config.mvc;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

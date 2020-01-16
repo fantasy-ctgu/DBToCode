@@ -1,4 +1,12 @@
-package com.ctgu.springbootbase.aop;
+/*
+ * @Author: Fantasy
+ * @Date: 2020-01-13 09:10:49
+ * @LastEditors  : Fantasy
+ * @LastEditTime : 2020-01-16 10:26:47
+ * @Descripttion: 
+ * @Email: 776474961@qq.com
+ */
+package $${basePackage}.aop;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,25 +19,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.ctgu.springbootbase.entity.Company;
 
-/**  
-* @Title: TestAop.java  
-*
-* @Package com.ctgu.springbootbase.aop  
-*
-* @Description: TODO
-*
-* @author Fantasy  
-*
-* @date 2019年4月14日  
-*
-* @version V1.0  
-*/
 @Aspect
 @Component
 public class CompanyPermissions {
-	@Pointcut("execution(* com.ctgu.springbootbase.controller.company.*.*(..))")
+	@Pointcut("execution(* $${basePackage}.controller.company.*.*(..))")
 	public void permissionPointcut() {
 	}
 	

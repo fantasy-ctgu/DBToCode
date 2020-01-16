@@ -3,13 +3,14 @@
 @Author: Fantasy
 @Date: 2020-01-13 14:00:32
 @LastEditors  : Fantasy
-@LastEditTime : 2020-01-15 10:58:50
+@LastEditTime : 2020-01-16 10:48:05
 @Descripttion: 
 @Email: 776474961@qq.com
 '''
 
 import os
 import re
+import json
 from DBAnalyze import DBAnalyze
 
 
@@ -17,11 +18,14 @@ class TemplateTranslate(object):
     def __init__(self, templateDir, outputDir, dbInfo):
         self.DBA = dbInfo
         self.templateDir = os.path.abspath(templateDir)
+        fp = open(os.path.join(self.templateDir, "conf.json"),
+                  "r+", encoding="utf-8")
+        self.conf = json.load(fp)
+        fp.close()
         self.outputDir = os.path.abspath(outputDir)
         self.templates = []
         self.isCycle = False
         self.cycleContent = []
-        self.translate()
 
     def scanDir(self, templateDir):
         objs = os.listdir(templateDir)
@@ -62,19 +66,34 @@ class TemplateTranslate(object):
         else:
             pass
 
+    def getConfValue(self, index, conf):
+        if isinstance(index, str):
+            index = index.split(".")
+        try:
+            if len(index) >= 1 and index[0] in conf.keys():
+                if len(index) == 1:
+                    return conf[index[0]]
+                else:
+                    return self.getConfValue(index[1:], conf[index[0]])
+            else:
+                return ""
+        except BaseException:
+            return ""
+
     def lineTranslate(self, line, data):
         items = re.findall(r'\$\${(.*?)}', line)
         for i in range(len(items)):
             items[i] = items[i].strip()
-            camelSmall = self.DBA.formatCamelCaseBySmall(items[i])
-            if camelSmall not in data.keys():
-                items[i] = ""
-            elif self.checkCamelCase(items[i]):
-                items[i] = self.DBA.formatCamelCaseByBig(data[camelSmall])
+            if items[i] not in data.keys():
+                items[i] = self.getConfValue(items[i], self.conf)
+            elif items[i] == 'columnType' and self.getConfValue("typeTranslate.translate", self.conf):
+                newType = self.getConfValue(
+                    "typeTranslate.typeMap." + data[items[i]], self.conf)
+                items[i] = newType if len(newType) > 0 else data[items[i]]
             else:
-                items[i] = self.DBA.formatCamelCaseBySmall(data[camelSmall])
-        str = re.split(r'\$\${.*?}', line)
+                items[i] = data[items[i]]
         items.append("")
+        str = re.split(r'\$\${.*?}', line)
         result = [rv for r in zip(str, items) for rv in r]
         return "".join(result)
 
@@ -103,29 +122,38 @@ class TemplateTranslate(object):
 
     def translate(self):
         self.scanDir(self.templateDir)
-        for table in self.DBA.tables:
-            for template in self.templates:
-                if not re.findall(r'\$\${.*}', template['filePath']):
-                    continue
-                inputFile = open(
-                    template['filePath'], 'r+', encoding='utf8', errors="ignore")
-                outputPath = os.path.join(
-                    self.outputDir, "." + template['filePath'].replace(self.templateDir,""))
-                outputPath = os.path.abspath(outputPath)
-                outputFileName = self.lineTranslate(outputPath, table)
-                print(outputFileName)
-                self.createFile(outputFileName)
-                outputFile = open(outputFileName, 'w+', encoding="utf8")
+        for template in self.templates:
+            inputFile = open(
+                template['filePath'], 'r+', encoding='utf8', errors="ignore")
+            outputPath = os.path.join(
+                self.outputDir, "." + template['filePath'].replace(self.templateDir, ""))
+            outputPath = os.path.abspath(outputPath)
+
+            if not re.findall(r'\$\${.*}', template['filePath']):
+                self.createFile(outputPath)
+                outputFile = open(outputPath, 'w+', encoding="utf8")
                 while True:
                     line = inputFile.readline()
-                    outputFile.write(self.syntax(inputFile, line, table))
+                    outputFile.write(self.syntax(inputFile, line, {}))
                     if not line:
                         break
-                inputFile.close()
-                outputFile.close()
+            else:
+                for table in self.DBA.tables:
+                    inputFile.seek(0, 0)
+                    outputFileName = self.lineTranslate(outputPath, table)
+                    self.createFile(outputFileName)
+                    outputFile = open(outputFileName, 'w+', encoding="utf8")
+                    while True:
+                        line = inputFile.readline()
+                        outputFile.write(self.syntax(inputFile, line, table))
+                        if not line:
+                            break
+            inputFile.close()
+            outputFile.close()
 
 
-dbInfo = DBAnalyze('testdb.sql')
-# tt = TemplateTranslate("./template/java/springboot", ".",dbInfo)
-tt = TemplateTranslate("./template/test", "./out", dbInfo)
-# print(tt.templates)
+if __name__ == "__main__":
+    dbInfo = DBAnalyze('./testdb.sql')
+    tt = TemplateTranslate("./template/java/springboot", "./out", dbInfo)
+    tt.translate()
+    # tt = TemplateTranslate("./template/test", "./out", dbInfo)

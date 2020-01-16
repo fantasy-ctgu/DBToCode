@@ -1,4 +1,12 @@
-package com.ctgu.springbootbase.config.mvc;
+/*
+ * @Author: Fantasy
+ * @Date: 2020-01-13 09:10:50
+ * @LastEditors  : Fantasy
+ * @LastEditTime : 2020-01-16 10:27:56
+ * @Descripttion: 
+ * @Email: 776474961@qq.com
+ */
+package $${basePackage}.config.mvc;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -16,7 +24,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 /**  
 * @Title: MvcConfiguration.java  
 *
-* @Package com.ctgu.springbootbase.config.web  
+* @Package $${basePackage}.config.web  
 *
 * @Description: 开启mvc，自动注入spring容器，WbcMvcConfigurerAdapter：配置视图解析器
 *

@@ -1,4 +1,4 @@
-package com.ctgu.springbootbase.utils;
+package $${basePackage}.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @Title: HttpUtil.java
  *
- * @Package com.ctgu.springbootbase.utils
+ * @Package $${basePackage}.utils
  *
  * @Description: TODO
  *

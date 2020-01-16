@@ -8,9 +8,9 @@ USE `campus_system`;
 
 
 -- 管理员
-CREATE TABLE if not exists admin(
+CREATE TABLE if not exists admin_test(
 	id int(11) auto_increment primary key,
-	username varchar(255) not null unique comment "用户名",
+	user_name varchar(255) not null unique comment "用户名",
 	password varchar(255) not null,
     adminname varchar(255) not null comment "管理员名称"
 )engine=InnoDB auto_increment=1 default charset=utf8;

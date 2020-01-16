@@ -1,0 +1,10 @@
+{
+    "basePackage":"com.ctgu.springbootbase",
+    "typeTranslate":{
+        "translate":true,
+        "typeMap":{
+            "int":"int",
+            "varchar": "String"
+        }
+    }
+}

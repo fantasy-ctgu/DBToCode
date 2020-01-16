@@ -1,4 +1,12 @@
-package com.ctgu.springbootbase.config.dao;
+/*
+ * @Author: Fantasy
+ * @Date: 2020-01-13 09:10:50
+ * @LastEditors: Fantasy
+ * @LastEditTime: 2020-01-15 14:33:25
+ * @Descripttion: 
+ * @Email: 776474961@qq.com
+ */
+package $${basePackage}.config.dao;
 
 import java.io.IOException;
 

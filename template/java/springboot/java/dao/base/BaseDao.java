@@ -1,8 +1,16 @@
-package com.ctgu.springbootbase.dao.base;
+/*
+ * @Author: Fantasy
+ * @Date: 2020-01-13 09:10:50
+ * @LastEditors  : Fantasy
+ * @LastEditTime : 2020-01-15 14:43:49
+ * @Descripttion: 
+ * @Email: 776474961@qq.com
+ */
+package $${basePackage}.dao.base;
 /**  
 * @Title: BaseDao.java  
 *
-* @Package com.ctgu.springbootbase.dao.base  
+* @Package ${basePackage}.dao.base  
 *
 * @Description: TODO
 *
