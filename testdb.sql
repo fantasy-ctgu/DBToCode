@@ -1,171 +1,333 @@
-﻿-- 1.上传物品(item)要审核，申请物品(apply)要审核,两者都混杂了审核过程表(audit_type) 其余审核的还有：用户表, 互动表, 求助活动表
--- 2.帮扶记录(support)和互动(interactive)都混杂了活动和物品
--- 3.物品和活动都有img图片
--- 4.求助活动和官方活动都有富文本编辑器, actinfo 和offinfo有开始和结束时间
+﻿/*
+ Navicat Premium Data Transfer
 
-CREATE DATABASE `campus_system`;
-USE `campus_system`;
+ Source Server         : localhost_3306
+ Source Server Type    : MySQL
+ Source Server Version : 50720
+ Source Host           : localhost:3306
+ Source Schema         : sideline
 
+ Target Server Type    : MySQL
+ Target Server Version : 50720
+ File Encoding         : 65001
 
--- 管理员
-CREATE TABLE if not exists admin_test(
-	id int(11) auto_increment primary key,
-	user_name varchar(255) not null unique comment "用户名",
-	password varchar(255) not null,
-    adminname varchar(255) not null comment "管理员名称"
-)engine=InnoDB auto_increment=1 default charset=utf8;
+ Date: 22/01/2020 15:40:50
+*/
 
--- 用户表
-CREATE TABLE if not exists user(
-	id int(11) auto_increment primary key,
-	username varchar(255) not null unique comment "用户名",
-	password varchar(255) not null,
-    actualname varchar(255) comment "真实姓名",
-    sex varchar(10) comment "性别",
-	province varchar(64) comment "省份",
-	city varchar(64) comment "城市",
-	address text comment "详细地址",
-	phone varchar(16) unique comment "联系电话",
-	email varchar(255) UNIQUE,
-	introduce text comment "个人简介",
-    identity varchar(18) unique comment "身份证号",
-    is_actualname int(1) default 0,
-	createtime timestamp default current_timestamp
-)engine=InnoDB auto_increment=1 default charset=utf8;
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
 
--- 物品类型表
-CREATE TABLE if not exists item_type(
-	id int(11) auto_increment primary key,
-	itemname varchar(255) not null unique comment "物品种类"
-)engine=InnoDB auto_increment=1 default charset=utf8;
+-- ----------------------------
+-- Table structure for admin
+-- ----------------------------
+DROP TABLE IF EXISTS `admin`;
+CREATE TABLE `admin`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `icon` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '头像',
+  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系邮箱',
+  `last_login_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最后登陆时间',
+  `last_ip` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后登陆IP',
+  `user_level_id` int(11) NULL DEFAULT 2,
+  `createtime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `username`(`username`) USING BTREE,
+  INDEX `user_level_id`(`user_level_id`) USING BTREE,
+  CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`user_level_id`) REFERENCES `user_level` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员' ROW_FORMAT = Dynamic;
 
+-- ----------------------------
+-- Records of admin
+-- ----------------------------
+INSERT INTO `admin` VALUES (1, 'fantasy', '7a1c07ff60f9c07ffe8da34ecbf4edc2', 'fantasy', NULL, '776474961@qq.com', '2020-01-22 15:29:27', '127.0.0.1', 2, '2020-01-22 15:29:27');
 
--- 物品表
-CREATE TABLE if not exists item(
-	id int(11) auto_increment primary key,
-	itemname varchar(255) not null comment "物品名",
-    itemimg varchar(255) comment "物品图片",
-    itemcount int(11) not null comment "物品数量",
-    introduce text comment "物品简介",
-    userid int(11) not null comment "上传人ID",
-    typeid int(11) not null comment "物品类型ID",
-    auditid int(11) not null comment "申请情况ID",
-	createtime timestamp default current_timestamp comment "上传时间"
-)engine=InnoDB auto_increment=1 default charset=utf8;
+-- ----------------------------
+-- Table structure for appraise
+-- ----------------------------
+DROP TABLE IF EXISTS `appraise`;
+CREATE TABLE `appraise`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `employ_id` int(11) NOT NULL COMMENT '雇佣记录id',
+  `appraise_type` int(1) NULL DEFAULT NULL COMMENT '0: 未评价 1: 被雇者评价雇佣者 2: 雇佣者评价被雇者',
+  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '评价内容',
+  `score` int(2) NOT NULL COMMENT '评分: 1~10',
+  `updatetime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0),
+  `createtime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `employ_id`(`employ_id`) USING BTREE,
+  CONSTRAINT `appraise_ibfk_1` FOREIGN KEY (`employ_id`) REFERENCES `employ` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '雇佣评价' ROW_FORMAT = Dynamic;
 
+-- ----------------------------
+-- Table structure for brief_message
+-- ----------------------------
+DROP TABLE IF EXISTS `brief_message`;
+CREATE TABLE `brief_message`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `from_id` int(11) NOT NULL,
+  `to_id` int(11) NOT NULL,
+  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `message_type` int(1) NOT NULL COMMENT '1: 被雇者发给雇佣者 2:雇佣者发给被雇者',
+  `is_read` int(1) NULL DEFAULT 0 COMMENT '1/0: 是/否已读',
+  `read_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '阅读时间',
+  `createtime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '被雇者消息' ROW_FORMAT = Dynamic;
 
--- 帮扶记录 A向B捐赠C物品名字叫D 或 A举办B活动B是接受者，名称叫C
-CREATE TABLE if not exists support(
-	id int(11) auto_increment primary key,
-	donorid int(11) not null comment "发起者",
-	itemid int(11) not null comment "物品活动ID",
-    itemnum int(11) not null default 1 comment "物品活动数量",
-    receiveid int(11) not null comment "接收者",
-    remarks varchar(255) not null comment "备注",
-    distin int(1) not null comment "区别 0代表捐赠,1代表活动",
-    createtime timestamp default current_timestamp comment "帮扶时间"
-)engine=InnoDB auto_increment=1 default charset=utf8;
+-- ----------------------------
+-- Table structure for employ
+-- ----------------------------
+DROP TABLE IF EXISTS `employ`;
+CREATE TABLE `employ`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `employee_id` int(11) NOT NULL COMMENT '被雇者',
+  `employer_id` int(11) NOT NULL COMMENT '雇佣者',
+  `employ_status_id` int(11) NULL DEFAULT 1,
+  `is_read` int(1) NULL DEFAULT 0,
+  `updatetime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0),
+  `createtime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `employer_id`(`employer_id`) USING BTREE,
+  INDEX `employee_id`(`employee_id`) USING BTREE,
+  INDEX `employ_status_id`(`employ_status_id`) USING BTREE,
+  CONSTRAINT `employ_ibfk_1` FOREIGN KEY (`employer_id`) REFERENCES `employer` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `employ_ibfk_2` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `employ_ibfk_3` FOREIGN KEY (`employ_status_id`) REFERENCES `employ_status` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '雇佣记录' ROW_FORMAT = Dynamic;
 
+-- ----------------------------
+-- Table structure for employ_status
+-- ----------------------------
+DROP TABLE IF EXISTS `employ_status`;
+CREATE TABLE `employ_status`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `explains` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '雇佣状态' ROW_FORMAT = Dynamic;
 
+-- ----------------------------
+-- Records of employ_status
+-- ----------------------------
+INSERT INTO `employ_status` VALUES (1, '已申请');
+INSERT INTO `employ_status` VALUES (2, '已放弃');
+INSERT INTO `employ_status` VALUES (3, '申请成功');
+INSERT INTO `employ_status` VALUES (4, '申请失败');
 
--- 互动表
-CREATE TABLE if not exists interactive(
-	id int(11) auto_increment primary key,
-	itemid int(11) not null comment "物品活动ID",
-	donorid int(11) not null comment "发起者",
-    receiveid int(11) not null comment "接收者",
-    content varchar(255) not null comment "评论内容",
-    distin int(1) not null comment "区别 0代表捐赠，1代表活动" ,
-	createtime timestamp default current_timestamp comment "评论时间"
-)engine=InnoDB auto_increment=1 default charset=utf8;
+-- ----------------------------
+-- Table structure for employee
+-- ----------------------------
+DROP TABLE IF EXISTS `employee`;
+CREATE TABLE `employee`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
+  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '真实姓名',
+  `sex` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `birth` date NULL DEFAULT NULL,
+  `icon` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '头像',
+  `top_degree` enum('博士','硕士','本科','大专','高中','初中','小学','其他') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最高学历',
+  `school` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最近就读学校',
+  `specialty` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '兼职意向',
+  `phone` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系电话',
+  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系邮箱',
+  `province` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所在省份',
+  `city` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所在城市',
+  `experience` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '个人经历',
+  `evaluation` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '自我评价',
+  `score` int(11) NOT NULL DEFAULT 0 COMMENT '雇佣记录总分',
+  `employ_count` int(11) NOT NULL DEFAULT 0 COMMENT '雇佣成功次数',
+  `report_count` int(11) NOT NULL DEFAULT 0 COMMENT '被举报次数',
+  `last_login_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最后登陆时间',
+  `last_ip` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后登陆IP',
+  `user_level_id` int(11) NULL DEFAULT 2,
+  `updatetime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0),
+  `createtime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `username`(`username`) USING BTREE,
+  INDEX `user_level_id`(`user_level_id`) USING BTREE,
+  CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`user_level_id`) REFERENCES `user_level` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '兼职人员' ROW_FORMAT = Dynamic;
 
--- 留言表
-CREATE TABLE if not exists leaveidea(
-	id int(11) auto_increment primary key,
-    ideaid int(11) not null comment "问题ID",
-	user1id int(11) not null comment "用户ID",
-    comment varchar(255) not null comment "评论内容",
-    is_solve int(1) not null default 0 comment "解决 0代表非成功解决，1代表成功解决" ,
-	createtime timestamp default current_timestamp comment "评论时间"
-)engine=InnoDB auto_increment=1 default charset=utf8;
+-- ----------------------------
+-- Records of employee
+-- ----------------------------
+INSERT INTO `employee` VALUES (1, 'fantasy', '7a1c07ff60f9c07ffe8da34ecbf4edc2', 'fantasy', '男', '1996-07-27', NULL, '本科', 'ctgu', '计算机相关', '15871577788', '776474961@qq.com', '湖北省', '宜昌', 'ACM 一等奖', '十佳青年', 0, 0, 0, '2020-01-22 15:29:27', '127.0.0.1', 2, '2020-01-22 15:29:27', '2020-01-22 15:29:27');
 
--- 审核过程表
-CREATE TABLE if not exists audit_type(
-	id int(11) auto_increment primary key,
-	audit_name varchar(255) not null comment "审核过程"
-)engine=InnoDB auto_increment=1 default charset=utf8;
+-- ----------------------------
+-- Table structure for employer
+-- ----------------------------
+DROP TABLE IF EXISTS `employer`;
+CREATE TABLE `employer`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
+  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `company_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '单位名称',
+  `icon` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '头像',
+  `province` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所在省份',
+  `city` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所在城市',
+  `address` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '详细地址',
+  `contacts` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系人',
+  `phone` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系电话',
+  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `introduce` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '单位介绍',
+  `score` int(11) NOT NULL DEFAULT 0 COMMENT '雇佣记录总分',
+  `employ_count` int(11) NOT NULL DEFAULT 0 COMMENT '雇佣成功次数',
+  `report_count` int(11) NOT NULL DEFAULT 0 COMMENT '被举报次数',
+  `last_login_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最后登陆时间',
+  `last_ip` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后登陆IP',
+  `user_level_id` int(11) NOT NULL DEFAULT 2,
+  `updatetime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0),
+  `createtime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `username`(`username`) USING BTREE,
+  INDEX `user_level_id`(`user_level_id`) USING BTREE,
+  CONSTRAINT `employer_ibfk_1` FOREIGN KEY (`user_level_id`) REFERENCES `user_level` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '招聘单位' ROW_FORMAT = Dynamic;
 
--- 物品申请表
-CREATE TABLE if not exists apply(
-	id int(11) auto_increment primary key,
-    itemid int(11) not null comment "物品ID",
-    userid int(11) not null comment "申请人ID",
-    auditid int(11) not null comment "申请情况ID",
-    createtime timestamp default current_timestamp comment "申请时间"
-)engine=InnoDB auto_increment=1 default charset=utf8;
+-- ----------------------------
+-- Records of employer
+-- ----------------------------
+INSERT INTO `employer` VALUES (1, 'fantasy', '7a1c07ff60f9c07ffe8da34ecbf4edc2', 'HUAWEI', NULL, '湖北', '武汉', '武汉大学南门口', 'chenxiang', '15871577021', '776474961@qq.com', '没有最好，只有更好', 983, 1000, 100, '2020-01-22 15:29:28', '192.168.9.211', 2, '2020-01-22 15:29:28', '2020-01-22 15:29:28');
 
--- 活动类别表
-CREATE TABLE if not exists acttype(
-	id int(11) auto_increment primary key,
-    actname varchar(255) not null comment "活动名称"    
-)engine=InnoDB auto_increment=1 default charset=utf8;
+-- ----------------------------
+-- Table structure for job
+-- ----------------------------
+DROP TABLE IF EXISTS `job`;
+CREATE TABLE `job`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `employer_id` int(11) NOT NULL COMMENT '发布单位',
+  `job_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '工作名称',
+  `pay_type` enum('日','周','月','完工') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '结算方式',
+  `wages` int(11) NOT NULL COMMENT '最低薪水/结算方式',
+  `job_time` int(11) NULL DEFAULT NULL COMMENT '每日工作时长',
+  `province` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所在省份',
+  `city` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所在城市',
+  `address` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '详细工作地点',
+  `request_num` int(3) NULL DEFAULT 1 COMMENT '需要人数',
+  `job_info` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '岗位描述',
+  `employee_require` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '对兼职者要求',
+  `job_type_id` int(11) NOT NULL COMMENT '岗位分类',
+  `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '关键字',
+  `browse_count` int(11) NULL DEFAULT 0,
+  `job_status_id` int(11) NULL DEFAULT 2,
+  `updatetime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0),
+  `createtime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `employer_id`(`employer_id`) USING BTREE,
+  INDEX `job_type_id`(`job_type_id`) USING BTREE,
+  INDEX `job_status_id`(`job_status_id`) USING BTREE,
+  CONSTRAINT `job_ibfk_1` FOREIGN KEY (`employer_id`) REFERENCES `employer` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `job_ibfk_2` FOREIGN KEY (`job_type_id`) REFERENCES `job_type` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `job_ibfk_3` FOREIGN KEY (`job_status_id`) REFERENCES `job_status` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '岗位信息' ROW_FORMAT = Dynamic;
 
--- 求助活动信息表
-CREATE TABLE if not exists actinfo(
-	id int(11) auto_increment primary key,
-    actid int(11) not null comment "活动ID",
-    userid int(11) not null comment "申请人ID",
-    auditid int(11) not null comment "申请情况ID",
-    actimg varchar(255) comment "活动图片",
-    introduce text not null comment "活动介绍",
-    acttypeid varchar(255) not null comment "活动类型",
-    starttime datetime not null comment "开始时间",
-    endtime Datetime not null comment "结束时间"
-)engine=InnoDB auto_increment=1 default charset=utf8;
+-- ----------------------------
+-- Table structure for job_name
+-- ----------------------------
+DROP TABLE IF EXISTS `job_name`;
+CREATE TABLE `job_name`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `job_type` int(11) NOT NULL,
+  `explains` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '岗位名称',
+  `reference_num` int(11) NULL DEFAULT 1 COMMENT '引用计数',
+  `createtime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '岗位名称' ROW_FORMAT = Dynamic;
 
+-- ----------------------------
+-- Table structure for job_status
+-- ----------------------------
+DROP TABLE IF EXISTS `job_status`;
+CREATE TABLE `job_status`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `explains` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '岗位状态' ROW_FORMAT = Dynamic;
 
--- 官方活动信息表
-CREATE TABLE if not exists offinfo(
-	id int(11) auto_increment primary key,
-    actid int(11) not null comment "活动ID",
-    userid int(11) not null comment "申请人ID",
-    actimg varchar(255) comment "活动图片",
-    introduce text not null comment "活动介绍",
-    acttypeid varchar(255) not null comment "活动类型",
-    starttime datetime not null comment "开始时间",
-    endtime Datetime not null comment "结束时间"
-)engine=InnoDB auto_increment=1 default charset=utf8;
+-- ----------------------------
+-- Records of job_status
+-- ----------------------------
+INSERT INTO `job_status` VALUES (1, '待审核');
+INSERT INTO `job_status` VALUES (2, '已审核');
+INSERT INTO `job_status` VALUES (3, '已结束');
+INSERT INTO `job_status` VALUES (4, '已删除');
 
-INSERT INTO admin VALUES(null,'admin','123456','author');
+-- ----------------------------
+-- Table structure for job_type
+-- ----------------------------
+DROP TABLE IF EXISTS `job_type`;
+CREATE TABLE `job_type`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `explains` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `reference_num` int(11) NULL DEFAULT 0 COMMENT '引用计数',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '岗位分类' ROW_FORMAT = Dynamic;
 
-INSERT INTO user VALUES(null,'user1','123456','Help','男','湖北省','宜昌市','湖北省宜昌市三峡大学', '12345678901', '1234567890@qq.com', '这是新用户', '421023199999999999',0,null);
-INSERT INTO user VALUES(null,'user2','654321','Boss','女', '湖北省','武汉市','湖北省武汉市武汉大学', '12456789456', '12345612310@qq.com', '武汉大学毕业生', '421023199999999989',0,null);
+-- ----------------------------
+-- Records of job_type
+-- ----------------------------
+INSERT INTO `job_type` VALUES (1, '互联网/计算机/IT/通信', 0);
+INSERT INTO `job_type` VALUES (2, '金融/会计/保险/销售', 0);
+INSERT INTO `job_type` VALUES (3, '建筑/房地产', 0);
+INSERT INTO `job_type` VALUES (4, '贸易/制造/运营', 0);
+INSERT INTO `job_type` VALUES (5, '传媒/广告', 0);
+INSERT INTO `job_type` VALUES (6, '服务/教育', 0);
+INSERT INTO `job_type` VALUES (7, '物流/运输', 0);
+INSERT INTO `job_type` VALUES (8, '政府/非营利组织/其它', 0);
 
+-- ----------------------------
+-- Table structure for keyword
+-- ----------------------------
+DROP TABLE IF EXISTS `keyword`;
+CREATE TABLE `keyword`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `explains` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '关键字',
+  `reference_num` int(11) NULL DEFAULT 1 COMMENT '引用计数',
+  `createtime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '关键字' ROW_FORMAT = Dynamic;
 
-INSERT INTO item_type VALUES(null,'学习资料');
-INSERT INTO item_type VALUES(null,'生活用品');
-INSERT INTO item_type VALUES(null,'金币');
+-- ----------------------------
+-- Table structure for report
+-- ----------------------------
+DROP TABLE IF EXISTS `report`;
+CREATE TABLE `report`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `employee_id` int(11) NOT NULL COMMENT '被雇者',
+  `employer_id` int(11) NOT NULL COMMENT '雇佣者',
+  `reason` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '举报原因',
+  `report_type` int(1) NOT NULL DEFAULT 1 COMMENT '1:用户举报单位,2:单位举报用户',
+  `deal_admin_id` int(11) NULL DEFAULT NULL COMMENT '处理管理员id',
+  `deal_result` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `deal_result_type` int(1) NULL DEFAULT NULL COMMENT '0:恶意举报 1:有效举报',
+  `updatetime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0),
+  `createtime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `employer_id`(`employer_id`) USING BTREE,
+  INDEX `employee_id`(`employee_id`) USING BTREE,
+  INDEX `deal_admin_id`(`deal_admin_id`) USING BTREE,
+  CONSTRAINT `report_ibfk_1` FOREIGN KEY (`employer_id`) REFERENCES `employer` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `report_ibfk_2` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `report_ibfk_3` FOREIGN KEY (`deal_admin_id`) REFERENCES `admin` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '举报信息' ROW_FORMAT = Dynamic;
 
-INSERT INTO item VALUES(null,'张宇18讲','C:\Users\Empire\Pictures\images', '2', '张宇老师带你学习高数','1','1','1',null);
+-- ----------------------------
+-- Table structure for user_level
+-- ----------------------------
+DROP TABLE IF EXISTS `user_level`;
+CREATE TABLE `user_level`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `explains` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户状态' ROW_FORMAT = Dynamic;
 
-INSERT INTO support VALUES(null,'1','1', '2','2', '捐赠行为','0',null);
+-- ----------------------------
+-- Records of user_level
+-- ----------------------------
+INSERT INTO `user_level` VALUES (1, '封禁');
+INSERT INTO `user_level` VALUES (2, '待审核');
+INSERT INTO `user_level` VALUES (3, '普通用户');
 
-INSERT INTO interactive VALUES(null,'1','1', '2', '书山有路勤为径，学海无涯苦作舟','0',null);
-INSERT INTO interactive VALUES(null,'1','2', '1', '多谢捐赠','0',null);
-
-INSERT INTO leaveidea VALUES(null,'1','1', '请问还有英语书吗?', '0',null);
-
-INSERT INTO audit_type VALUES(null, '审核中');
-INSERT INTO audit_type VALUES(null, '审核成功');
-INSERT INTO audit_type VALUES(null, '审核失败');
-
--- 用户2申请张宇18讲的书
-INSERT INTO apply VALUES(null, '1', '2', '1', null);
-
-INSERT INTO acttype VALUES(null, '公益献血');
-INSERT INTO acttype VALUES(null, '保护动物');
-INSERT INTO acttype VALUES(null, '筹钱治病');
-
-INSERT INTO actinfo VALUES(null, '1', '1', '1', 'D:\Empire\Pictures\help', '公益献血，从你我做起', '1', 0, 0);
-
-INSERT INTO offinfo VALUES(null, '1', '1', 'E:\Empire\Pictures\protect', '保护动物，从你我做起', '2', "2019-1-1 00:00:00", "2019-1-3 00:00:00");
+SET FOREIGN_KEY_CHECKS = 1;
