@@ -1,10 +1,17 @@
 {
-    "basePackage":"com.ctgu.springbootbase",
-    "typeTranslate":{
-        "translate":true,
-        "typeMap":{
-            "int":"int",
-            "varchar": "String"
+    "basePackage": "com.ctgu.qmx.tutor",
+    "typeTranslate": {
+        "translate": true,
+        "typeMap": {
+            "int": "Integer",
+            "bigint": "Integer",
+            "varchar": "String",
+            "text": "String",
+            "datetime": "Timestamp",
+            "timestamp": "Timestamp",
+            "decimal": "BigDecimal",
+            "enum": "String",
+            "date": "Date"
         }
     }
 }

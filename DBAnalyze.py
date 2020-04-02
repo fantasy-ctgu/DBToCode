@@ -3,7 +3,7 @@
 @Author: Fantasy
 @Date: 2020-01-13 12:37:20
 @LastEditors  : Fantasy
-@LastEditTime : 2020-01-22 17:04:29
+@LastEditTime : 2020-02-12 11:38:16
 @Descripttion:
 @Email: 776474961@qq.com
 '''
@@ -18,7 +18,7 @@ class DBAnalyze(object):
         self.tables = []
         '''格式
             tables = [
-                        {'tableName':'test',
+                        {'tableName':'testName','TableName':'TestName','table_name':'test_name'
                         'columns':[{'column_name':'user_name','columnName':'userName','ColumnName':'UserName','columnType':'','comment':''}]
                         },
                     ]
@@ -78,7 +78,7 @@ class DBAnalyze(object):
 
     def isFinishTable(self, line):
         '''是否建创建表结束'''
-        keys = ";".split()
+        keys = "engine character".split()
         if self.checkKeyword(line, keys):
             return True
         else:
@@ -92,7 +92,7 @@ class DBAnalyze(object):
             column['column_name'] = items[0]
             column['columnName'] = self.formatCamelCaseBySmall(items[0])
             column['ColumnName'] = self.formatCamelCaseByBig(items[0])
-            column['columnType'] = re.sub(r'\(.+\)', "", line.split()[1])
+            column['columnType'] = re.sub(r'\(.+\)', "", line.split()[1].split("(")[0])
             if self.hasComment(line):
                 column['comment'] = self.hasComment(line)
         return column
@@ -102,7 +102,7 @@ class DBAnalyze(object):
         if re.findall(r'\scomment\s', line):
             comment = line.split('comment')[-1]
             if re.findall(r"'(.+)'", comment):
-                comment = re.findall(r"'(.+)'", comment)[0]
+                comment = "//" + re.findall(r"'(.+)'", comment)[0]
             return comment
         return False
 
@@ -136,5 +136,5 @@ class DBAnalyze(object):
 
 
 if __name__ == "__main__":
-    db = DBAnalyze('D:\\GitHub\\DBToCode\\sideline.sql')
+    db = DBAnalyze('D:\\Work\\项目相关\\意心家教\\tutor_pro\\tutor.sql')
     print(db.tables)

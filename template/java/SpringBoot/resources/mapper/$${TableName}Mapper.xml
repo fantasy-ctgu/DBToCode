@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="$${basePackage}.mapper.$${TableName}Mapper">
+
+	<select id="doSelectBySome" parameterType="$${basePackage}.entity.$${TableName}" resultType="$${basePackage}.entity.$${TableName}">
+		SELECT * FROM $${table_name}
+		<where>
+			<if test="$${tableName} != null">
+				@{
+				<if test="$${tableName}.$${columnName} != null">
+					and $${table_name}.$${column_name} = #{$${tableName}.$${columnName}}
+				</if>
+				}@
+			</if>
+		</where>
+		ORDER BY $${table_name}.id DESC
+	</select>
+
+</mapper>
