@@ -1,0 +1,225 @@
+access_record.id access_record_id,access_record.city access_record_city,access_record.ip access_record_ip,access_record.create_time access_record_create_time,
+admin.id admin_id,admin.username admin_username,admin.password admin_password,admin.icon admin_icon,admin.city admin_city,admin.nick_name admin_nick_name,admin.note admin_note,admin.contact_info_id admin_contact_info_id,admin.status admin_status,admin.last_login_time admin_last_login_time,admin.create_time admin_create_time,
+admin_permission.id admin_permission_id,admin_permission.admin_id admin_permission_admin_id,admin_permission.permission_id admin_permission_permission_id,admin_permission.create_time admin_permission_create_time,
+admin_role.id admin_role_id,admin_role.admin_id admin_role_admin_id,admin_role.role_id admin_role_role_id,admin_role.create_time admin_role_create_time,
+contact_info.id contact_info_id,contact_info.phone contact_info_phone,contact_info.email contact_info_email,contact_info.qq contact_info_qq,contact_info.wechat contact_info_wechat,contact_info.verify_value contact_info_verify_value,
+district.id district_id,district.level district_level,district.parent_code district_parent_code,district.area_code district_area_code,district.zip_code district_zip_code,district.city_code district_city_code,district.name district_name,district.short_name district_short_name,district.merger_name district_merger_name,district.pinyin district_pinyin,district.lng district_lng,district.lat district_lat,
+employee_apply.id employee_apply_id,employee_apply.job_id employee_apply_job_id,employee_apply.order_num employee_apply_order_num,employee_apply.employee_id employee_apply_employee_id,employee_apply.status employee_apply_status,employee_apply.note employee_apply_note,employee_apply.update_time employee_apply_update_time,employee_apply.create_time employee_apply_create_time,
+employer_apply.id employer_apply_id,employer_apply.employee_id employer_apply_employee_id,employer_apply.employer_id employer_apply_employer_id,employer_apply.status employer_apply_status,employer_apply.note employer_apply_note,employer_apply.update_time employer_apply_update_time,employer_apply.create_time employer_apply_create_time,
+job.id job_id,job.user_id job_user_id,job.name job_name,job.rate job_rate,job.times job_times,job.pay_type job_pay_type,job.wages job_wages,job.request_num job_request_num,job.city job_city,job.address job_address,job.subject_id job_subject_id,job.description job_description,job.req_gender job_req_gender,job.req_degree job_req_degree,job.req_specialty job_req_specialty,job.req_other job_req_other,job.status job_status,job.browse_count job_browse_count,job.public_type job_public_type,job.update_time job_update_time,job.create_time job_create_time,
+order_entity.id order_entity_id,order_entity.order_num order_entity_order_num,order_entity.from_user_id order_entity_from_user_id,order_entity.from_admin_id order_entity_from_admin_id,order_entity.from_type order_entity_from_type,order_entity.city order_entity_city,order_entity.note order_entity_note,order_entity.create_time order_entity_create_time,
+order_flow.id order_flow_id,order_flow.order_num order_flow_order_num,order_flow.trade_no order_flow_trade_no,order_flow.amount order_flow_amount,order_flow.pay_platform order_flow_pay_platform,order_flow.pay_platform_status order_flow_pay_platform_status,order_flow.update_time order_flow_update_time,order_flow.create_time order_flow_create_time,
+order_operate_history.id order_operate_history_id,order_operate_history.order_num order_operate_history_order_num,order_operate_history.from_user_id order_operate_history_from_user_id,order_operate_history.from_admin_id order_operate_history_from_admin_id,order_operate_history.from_type order_operate_history_from_type,order_operate_history.type order_operate_history_type,order_operate_history.note order_operate_history_note,order_operate_history.create_time order_operate_history_create_time,
+orders.id orders_id,orders.order_num orders_order_num,orders.title orders_title,orders.body orders_body,orders.note orders_note,orders.amount orders_amount,orders.status orders_status,orders.pay_success_time orders_pay_success_time,orders.is_delete orders_is_delete,orders.update_time orders_update_time,orders.create_time orders_create_time,
+permission.id permission_id,permission.name permission_name,permission.value permission_value,permission.icon permission_icon,permission.type permission_type,permission.uri permission_uri,permission.sort permission_sort,permission.status permission_status,
+report_user.id report_user_id,report_user.from_user_id report_user_from_user_id,report_user.to_user_id report_user_to_user_id,report_user.reason report_user_reason,report_user.deal_admin_id report_user_deal_admin_id,report_user.deal_note report_user_deal_note,report_user.deal_result_type report_user_deal_result_type,report_user.update_time report_user_update_time,report_user.create_time report_user_create_time,
+resume.id resume_id,resume.user_id resume_user_id,resume.degree resume_degree,resume.school resume_school,resume.major resume_major,resume.subject resume_subject,resume.description resume_description,resume.experience resume_experience,resume.pay_type resume_pay_type,resume.wages resume_wages,resume.status resume_status,resume.city resume_city,resume.address resume_address,resume.browse_count resume_browse_count,resume.employ_count resume_employ_count,resume.update_time resume_update_time,resume.create_time resume_create_time,
+role.id role_id,role.pid role_pid,role.code role_code,role.description role_description,role.status role_status,role.sort role_sort,
+role_permission.id role_permission_id,role_permission.role_id role_permission_role_id,role_permission.permission_id role_permission_permission_id,role_permission.create_time role_permission_create_time,
+setting.id setting_id,setting.key_name setting_key_name,setting.value setting_value,setting.icon setting_icon,setting.note setting_note,setting.status setting_status,setting.create_time setting_create_time,
+subject.id subject_id,subject.pid subject_pid,subject.name subject_name,subject.note subject_note,subject.icon subject_icon,subject.sort subject_sort,subject.status subject_status,
+user.id user_id,user.username user_username,user.password user_password,user.icon user_icon,user.name user_name,user.gender user_gender,user.birth user_birth,user.city user_city,user.contact_info_id user_contact_info_id,user.have_resume user_have_resume,user.report_count user_report_count,user.roles user_roles,user.last_login_time user_last_login_time,user.create_time user_create_time,
+<result column="access_record_id" property="id" />
+<result column="access_record_city" property="city" />
+<result column="access_record_ip" property="ip" />
+<result column="access_record_create_time" property="createTime" />
+
+<result column="admin_id" property="id" />
+<result column="admin_username" property="username" />
+<result column="admin_password" property="password" />
+<result column="admin_icon" property="icon" />
+<result column="admin_city" property="city" />
+<result column="admin_nick_name" property="nickName" />
+<result column="admin_note" property="note" />
+<result column="admin_contact_info_id" property="contactInfoId" />
+<result column="admin_status" property="status" />
+<result column="admin_last_login_time" property="lastLoginTime" />
+<result column="admin_create_time" property="createTime" />
+
+<result column="admin_permission_id" property="id" />
+<result column="admin_permission_admin_id" property="adminId" />
+<result column="admin_permission_permission_id" property="permissionId" />
+<result column="admin_permission_create_time" property="createTime" />
+
+<result column="admin_role_id" property="id" />
+<result column="admin_role_admin_id" property="adminId" />
+<result column="admin_role_role_id" property="roleId" />
+<result column="admin_role_create_time" property="createTime" />
+
+<result column="contact_info_id" property="id" />
+<result column="contact_info_phone" property="phone" />
+<result column="contact_info_email" property="email" />
+<result column="contact_info_qq" property="qq" />
+<result column="contact_info_wechat" property="wechat" />
+<result column="contact_info_verify_value" property="verifyValue" />
+
+<result column="district_id" property="id" />
+<result column="district_level" property="level" />
+<result column="district_parent_code" property="parentCode" />
+<result column="district_area_code" property="areaCode" />
+<result column="district_zip_code" property="zipCode" />
+<result column="district_city_code" property="cityCode" />
+<result column="district_name" property="name" />
+<result column="district_short_name" property="shortName" />
+<result column="district_merger_name" property="mergerName" />
+<result column="district_pinyin" property="pinyin" />
+<result column="district_lng" property="lng" />
+<result column="district_lat" property="lat" />
+
+<result column="employee_apply_id" property="id" />
+<result column="employee_apply_job_id" property="jobId" />
+<result column="employee_apply_order_num" property="orderNum" />
+<result column="employee_apply_employee_id" property="employeeId" />
+<result column="employee_apply_status" property="status" />
+<result column="employee_apply_note" property="note" />
+<result column="employee_apply_update_time" property="updateTime" />
+<result column="employee_apply_create_time" property="createTime" />
+
+<result column="employer_apply_id" property="id" />
+<result column="employer_apply_employee_id" property="employeeId" />
+<result column="employer_apply_employer_id" property="employerId" />
+<result column="employer_apply_status" property="status" />
+<result column="employer_apply_note" property="note" />
+<result column="employer_apply_update_time" property="updateTime" />
+<result column="employer_apply_create_time" property="createTime" />
+
+<result column="job_id" property="id" />
+<result column="job_user_id" property="userId" />
+<result column="job_name" property="name" />
+<result column="job_rate" property="rate" />
+<result column="job_times" property="times" />
+<result column="job_pay_type" property="payType" />
+<result column="job_wages" property="wages" />
+<result column="job_request_num" property="requestNum" />
+<result column="job_city" property="city" />
+<result column="job_address" property="address" />
+<result column="job_subject_id" property="subjectId" />
+<result column="job_description" property="description" />
+<result column="job_req_gender" property="reqGender" />
+<result column="job_req_degree" property="reqDegree" />
+<result column="job_req_specialty" property="reqSpecialty" />
+<result column="job_req_other" property="reqOther" />
+<result column="job_status" property="status" />
+<result column="job_browse_count" property="browseCount" />
+<result column="job_public_type" property="publicType" />
+<result column="job_update_time" property="updateTime" />
+<result column="job_create_time" property="createTime" />
+
+<result column="order_entity_id" property="id" />
+<result column="order_entity_order_num" property="orderNum" />
+<result column="order_entity_from_user_id" property="fromUserId" />
+<result column="order_entity_from_admin_id" property="fromAdminId" />
+<result column="order_entity_from_type" property="fromType" />
+<result column="order_entity_city" property="city" />
+<result column="order_entity_note" property="note" />
+<result column="order_entity_create_time" property="createTime" />
+
+<result column="order_flow_id" property="id" />
+<result column="order_flow_order_num" property="orderNum" />
+<result column="order_flow_trade_no" property="tradeNo" />
+<result column="order_flow_amount" property="amount" />
+<result column="order_flow_pay_platform" property="payPlatform" />
+<result column="order_flow_pay_platform_status" property="payPlatformStatus" />
+<result column="order_flow_update_time" property="updateTime" />
+<result column="order_flow_create_time" property="createTime" />
+
+<result column="order_operate_history_id" property="id" />
+<result column="order_operate_history_order_num" property="orderNum" />
+<result column="order_operate_history_from_user_id" property="fromUserId" />
+<result column="order_operate_history_from_admin_id" property="fromAdminId" />
+<result column="order_operate_history_from_type" property="fromType" />
+<result column="order_operate_history_type" property="type" />
+<result column="order_operate_history_note" property="note" />
+<result column="order_operate_history_create_time" property="createTime" />
+
+<result column="orders_id" property="id" />
+<result column="orders_order_num" property="orderNum" />
+<result column="orders_title" property="title" />
+<result column="orders_body" property="body" />
+<result column="orders_note" property="note" />
+<result column="orders_amount" property="amount" />
+<result column="orders_status" property="status" />
+<result column="orders_pay_success_time" property="paySuccessTime" />
+<result column="orders_is_delete" property="isDelete" />
+<result column="orders_update_time" property="updateTime" />
+<result column="orders_create_time" property="createTime" />
+
+<result column="permission_id" property="id" />
+<result column="permission_name" property="name" />
+<result column="permission_value" property="value" />
+<result column="permission_icon" property="icon" />
+<result column="permission_type" property="type" />
+<result column="permission_uri" property="uri" />
+<result column="permission_sort" property="sort" />
+<result column="permission_status" property="status" />
+
+<result column="report_user_id" property="id" />
+<result column="report_user_from_user_id" property="fromUserId" />
+<result column="report_user_to_user_id" property="toUserId" />
+<result column="report_user_reason" property="reason" />
+<result column="report_user_deal_admin_id" property="dealAdminId" />
+<result column="report_user_deal_note" property="dealNote" />
+<result column="report_user_deal_result_type" property="dealResultType" />
+<result column="report_user_update_time" property="updateTime" />
+<result column="report_user_create_time" property="createTime" />
+
+<result column="resume_id" property="id" />
+<result column="resume_user_id" property="userId" />
+<result column="resume_degree" property="degree" />
+<result column="resume_school" property="school" />
+<result column="resume_major" property="major" />
+<result column="resume_subject" property="subject" />
+<result column="resume_description" property="description" />
+<result column="resume_experience" property="experience" />
+<result column="resume_pay_type" property="payType" />
+<result column="resume_wages" property="wages" />
+<result column="resume_status" property="status" />
+<result column="resume_city" property="city" />
+<result column="resume_address" property="address" />
+<result column="resume_browse_count" property="browseCount" />
+<result column="resume_employ_count" property="employCount" />
+<result column="resume_update_time" property="updateTime" />
+<result column="resume_create_time" property="createTime" />
+
+<result column="role_id" property="id" />
+<result column="role_pid" property="pid" />
+<result column="role_code" property="code" />
+<result column="role_description" property="description" />
+<result column="role_status" property="status" />
+<result column="role_sort" property="sort" />
+
+<result column="role_permission_id" property="id" />
+<result column="role_permission_role_id" property="roleId" />
+<result column="role_permission_permission_id" property="permissionId" />
+<result column="role_permission_create_time" property="createTime" />
+
+<result column="setting_id" property="id" />
+<result column="setting_key_name" property="keyName" />
+<result column="setting_value" property="value" />
+<result column="setting_icon" property="icon" />
+<result column="setting_note" property="note" />
+<result column="setting_status" property="status" />
+<result column="setting_create_time" property="createTime" />
+
+<result column="subject_id" property="id" />
+<result column="subject_pid" property="pid" />
+<result column="subject_name" property="name" />
+<result column="subject_note" property="note" />
+<result column="subject_icon" property="icon" />
+<result column="subject_sort" property="sort" />
+<result column="subject_status" property="status" />
+
+<result column="user_id" property="id" />
+<result column="user_username" property="username" />
+<result column="user_password" property="password" />
+<result column="user_icon" property="icon" />
+<result column="user_name" property="name" />
+<result column="user_gender" property="gender" />
+<result column="user_birth" property="birth" />
+<result column="user_city" property="city" />
+<result column="user_contact_info_id" property="contactInfoId" />
+<result column="user_have_resume" property="haveResume" />
+<result column="user_report_count" property="reportCount" />
+<result column="user_roles" property="roles" />
+<result column="user_last_login_time" property="lastLoginTime" />
+<result column="user_create_time" property="createTime" />

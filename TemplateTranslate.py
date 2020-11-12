@@ -2,8 +2,8 @@
 '''
 @Author: Fantasy
 @Date: 2020-01-13 14:00:32
-@LastEditors  : Fantasy
-@LastEditTime : 2020-02-12 15:38:12
+@LastEditors: Fantasy
+@LastEditTime: 2020-04-18 15:29:07
 @Descripttion: 
 @Email: 776474961@qq.com
 '''
@@ -211,7 +211,7 @@ class TemplateTranslate(object):
 
 
 if __name__ == "__main__":
-    dbInfo = DBAnalyze('C:\\Users\\Fantasy\\Desktop\\tutor.sql')
+    dbInfo = DBAnalyze('C:\\Users\\Fantasy\\Desktop\\sideline.sql')
     tt = TemplateTranslate("./template/java/springboot", "./out", dbInfo)
     # tt.translate()
     mybatisSql = tt.getMybatisSql()
